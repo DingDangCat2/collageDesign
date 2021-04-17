@@ -1,0 +1,15 @@
+.select{
+    width: 1240px;
+height: 575px;
+position: absolute;
+}
+.date2{
+   width: 1240px;
+    height: 380px;
+    background-color:whitesmoke;
+ position: absolute;
+ bottom: 5px;
+}
+.date1{
+    height: 190px;
+}

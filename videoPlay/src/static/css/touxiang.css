@@ -1,0 +1,13 @@
+.touxiang{
+float: right;
+margin-right: 25px;
+ width: 32px;
+height: 32px;
+position: relative;
+top: 12px;
+/*
+overflow: hidden;
+margin-top: 26px;
+border-radius: 50%; */
+
+}

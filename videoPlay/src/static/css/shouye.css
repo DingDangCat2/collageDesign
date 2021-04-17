@@ -1,0 +1,30 @@
+#components-layout-demo-responsive .logo {
+  height: px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+
+.site-layout-sub-header-background {
+  background:#001529;
+  height: 80px;
+}
+
+.site-layout-background {
+  background: #fff;
+  height: 99%;
+}
+.layout{
+  height: 785px;
+}
+.ant-layout-sider-children{
+  margin-top: 75px !important;
+}
+.logo{
+  width: 200px;
+  height: 100px;
+  background: #fff;
+  margin-top: -96px;
+}
+.ant-layout-footer{
+  padding: 20px 50px;
+}

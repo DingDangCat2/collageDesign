@@ -1,0 +1,34 @@
+.button1{
+    width: 130px;
+    height: 40px;
+    font-size: 15px;
+    color: white;
+    background-color:#13324e !important;
+    /*line-height: 40px;内联盒子没有行高属性*/
+    border-radius: 10px;
+    border-color: #13324e;
+    }
+  
+    .manage{
+        width: 70%;
+        margin-top: 20px;
+        margin-left:38px;
+    }
+    .td{
+        width: 50%;
+        height: 60px;
+        border-bottom: 1px solid rgb(228, 220, 220);
+        text-align: center;
+    }
+   
+    .img1{
+        margin-left: 130px;
+    }
+    .button2{
+        width: 80px;
+        height: 30px;
+        margin-left: 190px;
+        background-color: rgb(66, 66, 245);
+        color: white;
+        border-radius: 5px;
+    }

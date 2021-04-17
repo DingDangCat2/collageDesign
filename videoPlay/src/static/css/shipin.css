@@ -1,0 +1,17 @@
+.fanye{
+    height: 50px;
+    text-align: center;
+    position: absolute;
+    bottom: 5px;
+width: 100%;
+}
+.shipin{ 
+    height: 500px;
+    position: relative;    
+}
+.xianshi{
+    width: 100%;
+    height: 420px;
+    position: absolute;
+    top: 0;
+}

@@ -1,0 +1,40 @@
+.forget{
+    width: 500px;
+    height: 300px;
+    margin:80px auto;
+    color:rgb(84, 43, 235);
+    text-align: left;
+    
+}
+.btn1{
+    width: 80px;
+    height: 40px;
+    margin-left: 20px;
+    border-radius: 5px;
+    background-color:rgba(0,0, 255,0.2);
+}
+#forget{
+    width: 280px;
+    height: 40px;
+    border: 1px solid rgb(84, 43, 235);
+    border-radius: 5px;
+    margin-top: 50px;
+}
+#forget:focus{
+    outline: invert;
+    
+}
+h1{
+    text-align: center;
+    display: block;
+    border-bottom: 1px solid gray ;
+    color:rgb(84, 43, 235) ;
+}
+#forget2{
+    margin-top: 20px;
+    width: 100px;
+    height: 40px;
+    border: 1px solid rgb(84, 43, 235);
+    border-radius: 5px;
+    margin-left: 20px;
+}

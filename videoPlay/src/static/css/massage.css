@@ -1,0 +1,23 @@
+.massage{
+    width: 1000px;
+    height: 210px;
+    margin-top: 20px;
+    margin-left: 120px;
+    background:whitesmoke;
+    box-shadow: 10px -10px 5px gainsboro;
+}
+.massage1{
+    width: 500px;
+    height: 190px;
+    text-align: center;
+    margin-top: 10px;
+    line-height: 40px;
+    float: left;
+}
+.massage2{
+    width: 190px;
+    height: 190px;
+    float: right;
+    margin-right: 200px;
+    
+}
