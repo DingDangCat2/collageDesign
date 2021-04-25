@@ -6,6 +6,54 @@ const url=require('url');
 const  archiver=require('archiver');
 var mysql=require('mysql');
 const { query } = require('express');
+const moment=require('moment');
+const md5=require('md5');
+const axios=require('axios');
+const { Buffer } = require('buffer');
+exports.code=function (length) {
+        var chars = ['0','1','2','3','4','5','6','7','8','9'];
+        var result = ""; 
+        for(var i = 0; i < length ; i ++) {
+            var index = Math.ceil(Math.random()*9);
+            result += chars[index];
+        }
+        return result;
+    }
+exports.message=function(phone,code,callback){
+        let accountId="8aaf070878d419aa0178fd71645d10db";
+        let appToken="545e6b59033c458da2d5ee1d9a5bacc4";
+        var appid="8aaf070878d419aa0178fd71657a10e2";
+        let moments=moment().format("YYYYMMDDHHmmss");
+        let arg=md5(accountId+appToken+moments);
+        let urls="https://app.cloopen.com:8883"; 
+        let Rest_URL=urls+'/2013-12-26/Accounts/'+accountId+'/SMS/TemplateSMS?sig='+arg;
+        let auth=new Buffer.from((accountId+":"+moments))
+        let body={
+                to:phone,
+                appId:appid,
+                templateId:'1',
+                "datas":[code,"1"]    
+        }
+        let head={
+                'Accept':'application/json',
+                'Content-Type':'application/json;charset=utf-8',
+                'Content-Length':256,
+                'Authorization':auth.toString('base64'),
+
+        }
+        axios({
+                url:Rest_URL,
+                method:'post',
+                headers:head,
+                data:body,
+        }).then(
+                (ress)=>{ console.log(ress.data.templateSMS);
+                        callback(ress.data.templateSMS)})
+        .catch((er)=>{return;});
+}
+
+
+
 
 exports.fetchVideoThumbnail=function (videopath,request){
 	var filename = path.join(videopath);
@@ -162,6 +210,39 @@ connection.end();
       })
 }
 
+exports.listOptionS=function(req,res){
+        var connection = mysql.createConnection({
+                host: '127.0.0.1',
+                port:'3308',
+                user: 'root',
+                password: '',
+                database:"code",
+      }); 
+        connection.connect(); 
+        var pageNumber=req.body.pageName;   
+       
+
+        connection.query("select * from uservideo where id=? limit ?,?",[req.body.userId,parseInt(pageNumber*5),parseInt((pageNumber+1)*5)],function(err,results){//parseInt(pageNumber*5),parseInt((pageNumber+1)*5)
+                if(err){
+                        console.log(err);
+                }else{
+                        let arr1=[];
+                      arr1=  results.map((file,index)=>{
+                                return {    "id":file.allid,
+                                            "name":file.pages,
+                                            "time":file.time,
+                                            "img":"/image/"+req.session.user+"/"+file.pages.slice(0,-5)+".jpg",
+                                            "video":file.video,
+                                };
+                        }) 
+                        res.send(arr1);
+                        arr1=[];                    
+                }
+               
+                connection.end();
+        })
+
+}
 
 exports.listOption=function(req,res){
         var connection = mysql.createConnection({

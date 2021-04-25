@@ -11,6 +11,7 @@ var func=require('./func');
 var ffmpeg=require('fluent-ffmpeg');
 const zlib=require('zlib');
 const { request } = require('http');
+const md5 = require('md5');
 // express中是把session信息存储在内存中
 // 配置session
 var app=express();
@@ -28,6 +29,7 @@ app.use('/tss',express.static('./tss'));
 app.use('/image',express.static('./image'));
 
 app.post('/login',function(req,res){
+
   var a=req.body.username;
   var b=req.body.password;
   var connection = mysql.createConnection({
@@ -103,32 +105,66 @@ res.send('yes');
   }
 
 })
-app.post('/register',function(req,res){
+ app.post('/register',function(req,res){
+if(req.body.values){
+  console.log(req.body.values);
+  console.log(req.session.message);
+  console.log(req.session.username);
+  console.log(req.session.password);
+  if(req.body.values==req.session.message){
+
   var connection = mysql.createConnection({
     host: '127.0.0.1',
     port:'3308',
-    user: 'root',
+   user: 'root',
     password: '',
     database:"code",
-  });
+ });
   connection.connect();
-  connection.query("select * from user where name=?",[req.body.username],function(err,results){
-if(err){res.send(err)}else{
+  connection.query("select * from user where name=?",[req.session.username],function(err,results){
+ if(err){
+   res.statusCode=205;res.send(err)}else{
   if(results.length==0){
-    connection.query("insert into user (name,password,tel) values (?,?,?)",[req.body.username,req.body.password,req.body.phone],function(err,data){
+    connection.query("insert into user (name,password,tel) values (?,?,?)",[req.session.username,req.session.password,req.session.phone],function(err,data){
       if(err){
+        res.statusCode=205;
         res.send(err);
-      }else{
-        res.statusCode=200;
+     }else{
+        res.statusCode=201;
         res.send('ok');
+        req.session.destroy();
       }
-    })
+     })
   }else{
     res.statusCode=205;
-    res.send(' had!'); 
+    res.send('mysql had err!'); 
+    }
+  }
+ })}else{
+   res.statusCode=206;
+   console.log('验证码不正确！');
+   res.send('验证码不正确！');
+ }
+}else{
+  let codes=func.code(6);
+
+  func.message(req.body.phone,codes,(data)=>{ 
+    if(data.smsMessageSid){ 
+   res.statusCode=200;
+      res.send('ok');
    }
+   else{
+  
+     res.statusCode=205;
+     res.send('');
+   }
+ });
+ req.session.message=codes;
+ req.session.username=req.body.username;
+      req.session.password=req.body.password;
+      req.session.phone=req.body.phone;
 }
-  })
+
 
 })
 
@@ -154,7 +190,13 @@ app.get('/out',function(req,res){
 res.send('ok');
 });
 
-
+app.post('/shipinS',function(req,res){
+  if(!req.session.ids){
+    return res.send();
+   }else{
+     func.listOptionS(req,res);
+   }
+})
 app.post('/shipin',function(req,res){
 if(!req.session.ids){
  return res.send();
@@ -193,17 +235,34 @@ app.post('/password',function(req,res){
     user: 'root',
     password: '',
     database:"code",
+    multipleStatements:true,
 }); 
 connection.connect(); 
 connection.query("update user set password=? where name=?",[req.body.password,req.session.user],function(err,result){
   if(err){
     console.log(err);
-    res.send(' ')
+    res.send('')
   }else{
-    if(result.affectrdRows>0){
-      req.session.destroy();
-  console.log(req.session.user);
-    res.send('yes');
+    console.log(result.affectedRows);
+    if(result.affectedRows>0){
+      var connection = mysql.createConnection({
+        host: '127.0.0.1',
+        port:'3308',
+        user: 'root',
+        password: '',
+        database:"code",
+        multipleStatements:true,
+    }); 
+      connection.query("update admin set password=? where name=?",[req.body.password,req.session.user],function(err,results){
+        if(err){
+          console.log(err);
+        }else{
+        console.log(results);
+        req.session.destroy();
+        res.send('yes');
+        }
+      })
+    
   }else{
     res.send(' ');
   }
@@ -297,9 +356,11 @@ app.post('/avatarLoad',uploads.single('avatar'),function(req,res){
 })
 
 app.get('/avatarDisplay',function(req,res){
+
   let filess=[];
   let pa='./touxiang/'+req.session.user;
-   filess=fs.readdirSync(pa);
+  try{
+   filess=fs.readdirSync(pa);}catch(e){return;}
   filess.forEach(function(file,index){
    fs.readFile(pa+'/'+file,function(err,data){
     res.send(data);

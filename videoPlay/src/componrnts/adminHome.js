@@ -12,6 +12,7 @@ import Ajax from '../ajax/ajax';
 import rules from './shouyezujian/rules';
 import list from '../componrnts/zhuye/bofang/list';
 import userList from './adminAppAllUer/userList';
+import playVideo from '../componrnts/adminAppAllUer/adminBfVideo';
 const { Header, Content, Footer, Sider } = Layout;
 class adminHome extends React.Component {
   constructor(props){
@@ -88,9 +89,11 @@ this.props.history.replace('/admin');
       
        <Redirect to='/admin_home/admin_home'></Redirect>
           <Route path='/admin_home/admin_home' component={allUser}></Route>
-            <Route path='/admin_home/user/:id' component={userList}></Route>
+            <Route path='/admin_home/user/:id' exact component={userList}></Route>
+            <Route path='/admin_home/user/bfvideos/:id' exact component={playVideo}></Route>
           <Route path='/admin_home/admin_home2' component={Select}></Route>
           <Route path='/admin_home/admin_home3' component={list}></Route>
+          <Route path='/admin_home/list/:id' component={playVideo}></Route>
           <Route path='/admin_home/admin_home4' component={rules}></Route>
 
         </div>

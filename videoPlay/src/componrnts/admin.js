@@ -86,7 +86,7 @@ onFinish (values) {
         <Button type="primary" htmlType="submit" className="login-form-button">
           Log in
         </Button>
-        Or<button onClick={this.Zhuce.bind(this)}>zhuce</button>
+        
       </Form.Item>
     </Form>
 

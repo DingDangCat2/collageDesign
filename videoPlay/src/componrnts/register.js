@@ -4,6 +4,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css'; 
 import '../static/css/register.css';
 import {withRouter} from 'react-router-dom';
+import MesConfirm from './messageConfirm';
+import axios from 'axios';
 import {
     Form,
     Input,
@@ -51,25 +53,40 @@ import {
       },
     },
   };
-  
-  const Register = () => {
-    const [form] = Form.useForm();
-    const onFinish = values => {
+
+  class Register extends React.Component{
+   constructor(props){
+     super(props);
+     this.state={
+       'status':false
+     }
+   }
+    onFinish = values => {
       console.log('Received values of form: ', values);
-      Ajax('/register',values,'post').then(function(res){
-        if(res.status==205){
-          message.error("用户名已经存在");
-        }else{if(res.status==200){
-        message.success('注册成功！');
-        }else{
-          message.error('服务器错误！稍后重试');           
+      if(values){
+        this.setState({'status':true});
+      axios({
+        url:'/register',
+        method:'post',
+        data:values,
+        headers:{
+          'Content-Type':'application/json;charset=utf-8',
+  
         }
-      }
+      }).then(function(res){
+        if(res.status==205){
+        message.error('error');
+        }else{
+          if(res.status=200 || 201){
+            message.success('ok!');
+          }
+        }
 
       })
+    }
     };
   
-    const prefixSelector = (
+    prefixSelector = (
       <Form.Item name="prefix" noStyle>
         <Select
           style={{
@@ -81,14 +98,16 @@ import {
         </Select>
       </Form.Item>  
     );
-    const [autoCompleteResult, setAutoCompleteResult] = useState([]);
+  render(){
+
+  
     return (
         <div className="register">
       <Form
         {...formItemLayout}
-        form={form}
+     
         name="register"
-        onFinish={onFinish}
+        onFinish={this.onFinish.bind(this)}
         scrollToFirstError
       >
  <Form.Item
@@ -154,7 +173,7 @@ import {
           ]}
         >
           <Input
-            addonBefore={prefixSelector}
+            addonBefore={this.prefixSelector}
             style={{
               width: '100%',
             }}
@@ -178,13 +197,14 @@ import {
           </Checkbox>   
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">
-            Register
-          </Button>
+      
+            <MesConfirm status={this.state.status}></MesConfirm>
+        
         </Form.Item>
       </Form>
       </div>
     );
   };
+}
 
 export default withRouter(Register);

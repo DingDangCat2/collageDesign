@@ -39,7 +39,7 @@ class Chouti extends React.Component {
   Finish(values){
     console.log(values);
  Ajax('/password',values,'POST').then((res)=>{
-if(res!=' '){
+if(res!=''){
   console.log(res.data);
   message.success('this is success！');
   this.setState({

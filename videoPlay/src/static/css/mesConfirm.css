@@ -1,0 +1,17 @@
+.message Input{
+    width: 75%;
+    height: 50px;
+    float: left;
+}
+.message .btnA{
+    width: 20%;
+
+    float: left;
+    margin-left: 10px;
+}
+.message .btnB{
+margin-top: 15px;
+margin-left: 50%;
+transform: translate(-50%);
+    background-color: skyblue;
+}
